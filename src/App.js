@@ -8,10 +8,35 @@ const Square = ({ value, onSquareClick }) => {
   )
 }
 
+const calculateWinner = (squares) => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i]
+    if ((squares[a] === squares[b]) && (squares[b] === squares[c]) && squares[c] === squares[a]) {
+      return squares[a]
+    }
+  }
+  return;
+}
+
 const Board = () => {
+
+
 
   const [squares, setSquares] = useState(["", "", "", "", "", "", "", "", ""])
   const [go, setGo] = useState("X")
+
+
 
   const handleClick = (i) => {
 
@@ -31,24 +56,22 @@ const Board = () => {
     setSquares(nextSquares);
   }
 
+
+
   let status = null;
   const winner = calculateWinner(squares)
-
-  // const isGameCompleted = (squares) => {
-  //   for (let index = 0; index < squares.length; index++) {
-  //     const element = squares[index];
-
-  //     if (element === "") {
-  //       return false
-  //     }
-  //   }
-  // }
 
   if (winner) {
     status = 'Winner: ' + winner;
   } else {
     status = 'Now: ' + (go === 'X' ? 'X' : 'O') + "'s move.";
   }
+
+  const resetGame = () => {
+    setSquares(["","","","","","","","",""])
+    setGo("X")
+  }
+
 
   return (
     <>
@@ -71,30 +94,13 @@ const Board = () => {
         <Square value={squares[7]} onSquareClick={() => { handleClick(7) }} />
         <Square value={squares[8]} onSquareClick={() => { handleClick(8) }} />
       </div>
+      <div className='reset-button'>
+        <button onClick={() => {resetGame()}}>reset</button>
+      </div>
     </>
   )
 }
 
-const calculateWinner = (squares) => {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
-
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i]
-    if ((squares[a] === squares[b]) && (squares[b] === squares[c]) && squares[c] === squares[a]) {
-      return squares[a]
-    }
-  }
-  return;
-}
 
 function App() {
   return (
